@@ -1,0 +1,134 @@
+.sceneContainer {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  background-color: var(--color-bg-dark);
+  z-index: var(--z-scene);
+  opacity: 0; /* Handled by GSAP on mount */
+}
+
+.layer {
+  position: absolute;
+  top: -5%;
+  left: -5%;
+  width: 110%;
+  height: 110%;
+  background-size: cover;
+  background-position: center;
+  pointer-events: none;
+}
+
+.ambientGlow {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 80%;
+  height: 80%;
+  transform: translate(-50%, -50%);
+  background: radial-gradient(circle, rgba(212, 175, 55, 0.15) 0%, rgba(10, 10, 5, 0) 70%);
+  animation: pulseGlow 8s infinite alternate ease-in-out;
+}
+
+@keyframes pulseGlow {
+  0% { opacity: 0.6; transform: translate(-50%, -50%) scale(0.9); }
+  100% { opacity: 1; transform: translate(-50%, -50%) scale(1.1); }
+}
+
+.layerBackground {
+  background: radial-gradient(circle at center, #1a2a1f 0%, var(--color-bg-dark) 100%);
+}
+
+.layerMid {
+  /* Placeholder for Mandapam illustration */
+  /* border: 1px solid rgba(212, 175, 55, 0.05); */
+}
+
+.layerInteractive {
+  /* Allowed to click within this layer's children */
+}
+
+.layerForeground {
+  /* Placeholder for floating foreground elements */
+}
+
+/* Hotspot Interactions */
+.hotspot {
+  position: absolute;
+  transform: translate(-50%, -50%);
+  pointer-events: auto;
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.hotspotContent {
+  width: 52px;
+  height: 52px;
+  background-color: rgba(10, 10, 5, 0.85);
+  border: 1px solid var(--color-primary);
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: var(--color-primary);
+  position: relative;
+  z-index: 2;
+  transition: all 0.3s ease;
+  backdrop-filter: blur(4px);
+}
+
+.hotspot:hover .hotspotContent {
+  background-color: var(--color-primary);
+  color: var(--color-bg-dark);
+  transform: scale(1.1);
+  box-shadow: 0 0 15px rgba(212, 175, 55, 0.3);
+}
+
+.hotspotPulse {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 52px;
+  height: 52px;
+  background-color: var(--color-primary);
+  border-radius: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 1;
+  animation: pulse 2.5s infinite cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+@keyframes pulse {
+  0% { transform: translate(-50%, -50%) scale(1); opacity: 0.7; }
+  100% { transform: translate(-50%, -50%) scale(1.8); opacity: 0; }
+}
+
+.hotspotLabel {
+  margin-top: 12px;
+  font-size: 0.85rem;
+  letter-spacing: 0.1em;
+  color: var(--color-primary);
+  text-transform: uppercase;
+  text-shadow: 0px 2px 4px rgba(0,0,0,0.9);
+  opacity: 0;
+  transform: translateY(10px);
+  transition: all 0.3s ease;
+  white-space: nowrap;
+}
+
+.hotspot:hover .hotspotLabel {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Touch optimization: labels always slightly visible */
+@media (max-width: 768px) {
+  .hotspotLabel {
+    opacity: 0.8;
+    transform: translateY(0);
+    color: var(--color-text-main);
+  }
+}

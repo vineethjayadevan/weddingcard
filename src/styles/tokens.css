@@ -1,0 +1,19 @@
+:root {
+  /* Colors for Concept A: Kerala Heritage */
+  --color-bg-dark: #0a0a05;
+  --color-primary: #d4af37; /* Gold */
+  --color-secondary: #f4e8d3; /* Cream */
+  --color-accent: #2e4a36; /* Deep Green */
+  --color-text-main: #f4e8d3;
+  --color-text-muted: rgba(244, 232, 211, 0.7);
+
+  /* Typography */
+  --font-heading: 'Playfair Display', serif;
+  --font-body: 'Inter', sans-serif;
+  
+  /* Z-index */
+  --z-scene: 1;
+  --z-ui: 10;
+  --z-modal: 100;
+  --z-preloader: 1000;
+}
