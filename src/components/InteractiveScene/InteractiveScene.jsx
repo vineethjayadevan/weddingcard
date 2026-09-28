@@ -9,16 +9,16 @@ import Couple from '../Sections/Couple';
 import WeddingDetails from '../Sections/WeddingDetails';
 import Story from '../Sections/Story';
 
-const InteractiveScene = ({ hasStarted }) => {
+const InteractiveScene = ({ hasStarted, hasOrientationPermission }) => {
   const sceneRef = useRef(null);
   const layersRef = useRef([]);
   const [activeModal, setActiveModal] = useState(null);
 
   const hotspots = [
-    { id: 'date', label: 'Wedding Date', icon: Calendar, top: '40%', left: '30%' },
-    { id: 'venue', label: 'Venue', icon: MapPin, top: '60%', left: '70%' },
-    { id: 'story', label: 'Our Story', icon: BookOpen, top: '70%', left: '20%' },
-    { id: 'couple', label: 'The Couple', icon: Heart, top: '45%', left: '50%' },
+    { id: 'date', label: 'Wedding Date', icon: Calendar, top: '35%', left: '30%' },
+    { id: 'venue', label: 'Venue', icon: MapPin, top: '65%', left: '75%' },
+    { id: 'story', label: 'Our Story', icon: BookOpen, top: '75%', left: '25%' },
+    { id: 'couple', label: 'The Couple', icon: Heart, top: '45%', left: '60%' },
   ];
 
   // Gyro / Parallax logic
@@ -46,9 +46,59 @@ const InteractiveScene = ({ hasStarted }) => {
       });
     };
 
+    const handleDeviceOrientation = (e) => {
+      if (activeModal) return;
+      
+      let xPos = 0;
+      let yPos = 0;
+
+      if (e.gamma !== null && e.beta !== null) {
+        // gamma is left-to-right tilt (-90 to 90)
+        let gamma = e.gamma;
+        // beta is front-to-back tilt (-180 to 180)
+        let beta = e.beta;
+        
+        // Constrain values to avoid wild spinning
+        if (gamma > 30) gamma = 30;
+        if (gamma < -30) gamma = -30;
+        
+        // Assume natural holding position is tilted up slightly (approx 45 degrees)
+        let adjustedBeta = beta - 45;
+        if (adjustedBeta > 30) adjustedBeta = 30;
+        if (adjustedBeta < -30) adjustedBeta = -30;
+
+        xPos = (gamma / 30) * 15; // Max 15px move
+        yPos = (adjustedBeta / 30) * 15;
+      }
+
+      layersRef.current.forEach((layer, index) => {
+        if (!layer) return;
+        const depth = index + 1;
+        gsap.to(layer, {
+          x: xPos * depth,
+          y: yPos * depth,
+          duration: 0.5, // Faster response for gyro
+          ease: "power2.out",
+          overwrite: "auto"
+        });
+      });
+    };
+
+    // Always add mouse move for desktop
     window.addEventListener('mousemove', handleMouseMove);
-    return () => window.removeEventListener('mousemove', handleMouseMove);
-  }, [hasStarted, activeModal]);
+    
+    // Add gyro for mobile if permission granted
+    if (hasOrientationPermission) {
+      window.addEventListener('deviceorientation', handleDeviceOrientation);
+    }
+
+    return () => {
+      window.removeEventListener('mousemove', handleMouseMove);
+      if (hasOrientationPermission) {
+        window.removeEventListener('deviceorientation', handleDeviceOrientation);
+      }
+    };
+  }, [hasStarted, activeModal, hasOrientationPermission]);
 
   // Opening Cinematic Animation
   useEffect(() => {

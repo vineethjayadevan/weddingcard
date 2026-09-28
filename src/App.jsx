@@ -6,10 +6,26 @@ import { AnimatePresence } from 'framer-motion';
 function App() {
   const [isLoaded, setIsLoaded] = useState(false);
   const [hasStarted, setHasStarted] = useState(false);
+  const [orientationPermission, setOrientationPermission] = useState(false);
 
-  const handleStart = () => {
+  const handleStart = async () => {
+    // Request device orientation permission for iOS 13+
+    if (typeof DeviceOrientationEvent !== 'undefined' && typeof DeviceOrientationEvent.requestPermission === 'function') {
+      try {
+        const permissionState = await DeviceOrientationEvent.requestPermission();
+        if (permissionState === 'granted') {
+          setOrientationPermission(true);
+        }
+      } catch (error) {
+        console.error("Error requesting device orientation permission", error);
+      }
+    } else {
+      // Non-iOS 13+ devices typically don't require explicit permission
+      setOrientationPermission(true);
+    }
+    
     setHasStarted(true);
-    // Audio triggering can be added here later
+    // Audio triggering can be safely added here because we are in a user-initiated event handler
   };
 
   return (
@@ -25,7 +41,7 @@ function App() {
         )}
       </AnimatePresence>
 
-      <InteractiveScene hasStarted={hasStarted} />
+      <InteractiveScene hasStarted={hasStarted} hasOrientationPermission={orientationPermission} />
     </>
   );
 }
