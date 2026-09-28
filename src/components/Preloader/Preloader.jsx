@@ -38,6 +38,20 @@ const Preloader = ({ onLoaded, isLoaded, onStart }) => {
         />
       </div>
 
+      {/* Cinematic Background Image Overlay (Mobile Friendly) */}
+      <motion.div 
+        className={styles.userBackgroundImage}
+        initial={{ opacity: 0, scale: 1.05 }}
+        animate={{ opacity: isTransitioning ? 0 : 0.4, scale: 1 }}
+        transition={{ duration: 4, ease: "easeOut" }}
+      >
+        <img 
+          src="/opening-bg.jpeg" 
+          alt="Cinematic Background" 
+          onError={(e) => e.target.style.display = 'none'} 
+        />
+      </motion.div>
+
       {/* Cinematic Watermark Names (Running Background) */}
       <motion.div 
         className={styles.watermarkNames}

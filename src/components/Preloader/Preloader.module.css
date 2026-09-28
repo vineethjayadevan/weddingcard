@@ -54,6 +54,25 @@
   to { transform: translateY(-150px); }
 }
 
+/* User Background Image */
+.userBackgroundImage {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  z-index: 1; /* Sits exactly at the watermark level */
+  pointer-events: none;
+  mix-blend-mode: luminosity; /* Blends elegantly with the navy blue */
+}
+
+.userBackgroundImage img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover; /* Mobile friendly: prevents stretching */
+  object-position: center;
+}
+
 /* Watermark Names */
 .watermarkNames {
   position: absolute;
