@@ -4,97 +4,360 @@
   left: 0;
   width: 100%;
   height: 100%;
-  background: radial-gradient(circle at center, var(--color-bg-dark) 0%, var(--color-bg-deep) 100%);
+  background-color: var(--color-bg-dark);
   z-index: var(--z-preloader);
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
+  overflow: hidden;
 }
 
+.atmosphere {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: radial-gradient(circle at center, rgba(7, 17, 31, 0) 0%, rgba(3, 8, 15, 1) 100%);
+  pointer-events: none;
+}
+
+.centerGlow {
+  position: absolute;
+  top: 45%;
+  left: 50%;
+  width: 50vmin;
+  height: 50vmin;
+  transform: translate(-50%, -50%);
+  background: radial-gradient(circle, rgba(214, 181, 109, 0.12) 0%, transparent 60%);
+  border-radius: 50%;
+  will-change: transform, opacity;
+}
+
+.particles {
+  position: absolute;
+  width: 100%;
+  height: 200%;
+  top: -50%;
+  background-image: 
+    radial-gradient(circle at 30% 20%, rgba(247, 241, 229, 0.4) 1px, transparent 1px),
+    radial-gradient(circle at 70% 60%, rgba(214, 181, 109, 0.3) 1.5px, transparent 1.5px),
+    radial-gradient(circle at 40% 80%, rgba(247, 241, 229, 0.5) 1px, transparent 1px);
+  background-size: 150px 150px;
+  animation: drift 60s linear infinite;
+  opacity: 0.6;
+}
+
+@keyframes drift {
+  from { transform: translateY(0); }
+  to { transform: translateY(-150px); }
+}
+
+/* Watermark Names */
+.watermarkNames {
+  position: absolute;
+  top: 45%;
+  left: 0;
+  width: 100vw;
+  height: 50vh; /* Spaces top and bottom rows elegantly based on screen height */
+  transform: translateY(-50%);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between; /* Pushes rows to top and bottom of this container */
+  align-items: center;
+  pointer-events: none;
+  z-index: 1;
+  overflow: hidden;
+}
+
+.marqueeRow {
+  display: flex;
+  width: max-content;
+  align-items: center;
+  gap: 8vw;
+}
+
+.marqueeRowTop {
+  animation: scrollLeft 45s linear infinite;
+}
+
+.marqueeRowBottom {
+  animation: scrollRight 45s linear infinite;
+}
+
+@keyframes scrollLeft {
+  0% { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
+}
+
+@keyframes scrollRight {
+  0% { transform: translateX(-50%); }
+  100% { transform: translateX(0); }
+}
+
+.watermarkName {
+  font-family: var(--font-heading);
+  font-size: 16vw;
+  color: var(--color-secondary);
+  white-space: nowrap;
+  letter-spacing: 0.15em;
+  filter: blur(2px);
+  text-transform: uppercase;
+  line-height: 1;
+}
+
+.watermarkSeparator {
+  font-family: var(--font-body);
+  font-size: 8vw;
+  color: var(--color-primary);
+  filter: blur(1px);
+  opacity: 0.6;
+}
+
+/* Foreground Content */
 .content {
-  text-align: center;
+  position: relative;
+  z-index: 2;
   display: flex;
   flex-direction: column;
   align-items: center;
+  justify-content: space-between;
+  height: 90%;
+  width: 100%;
+  padding-top: 5vh;
 }
 
-.monogramContainer {
-  margin-bottom: 3rem;
-}
-
-.monogramBorder {
-  border: 1px solid rgba(214, 181, 109, 0.3);
-  padding: 40px 50px;
-  border-radius: 4px;
+/* The Cross */
+.crossContainer {
   position: relative;
   display: flex;
-  flex-direction: column;
+  justify-content: center;
   align-items: center;
-  background: rgba(7, 17, 31, 0.4);
-  backdrop-filter: blur(5px);
+  flex-grow: 1;
 }
 
-.cross {
-  font-family: var(--font-body);
-  color: var(--color-primary);
-  font-size: 1.2rem;
-  margin-bottom: 15px;
-  opacity: 0.8;
+.halo {
+  position: absolute;
+  width: 250px;
+  height: 350px;
+  border: 1px solid rgba(214, 181, 109, 0.08);
+  border-radius: 50%;
+  box-shadow: inset 0 0 40px rgba(214, 181, 109, 0.02);
 }
 
-.initials {
+.sacredCross {
+  width: 200px;
+  height: 300px;
+  filter: drop-shadow(0 0 10px rgba(214, 181, 109, 0.4));
+  animation: breathe 5s infinite alternate ease-in-out;
+  animation-delay: 3s;
+}
+
+@keyframes breathe {
+  0% { filter: drop-shadow(0 0 8px rgba(214, 181, 109, 0.3)) brightness(1); }
+  100% { filter: drop-shadow(0 0 18px rgba(214, 181, 109, 0.7)) brightness(1.15); }
+}
+
+/* Typography & Messages */
+.messageContainer {
+  text-align: center;
+  margin-bottom: 2vh;
+}
+
+.openingMessage {
   font-family: var(--font-heading);
-  font-size: 4.5rem;
-  color: var(--color-secondary);
-  letter-spacing: 0.15em;
+  font-size: 2.2rem;
   font-style: italic;
+  color: var(--color-primary);
+  margin-bottom: 20px;
+  font-weight: 400;
+  text-shadow: 0 2px 10px rgba(0,0,0,0.5);
+}
+
+.namesContainer {
   display: flex;
   align-items: center;
+  justify-content: center;
   gap: 15px;
+  margin-bottom: 20px;
+}
+
+.name {
+  font-family: var(--font-heading);
+  font-size: 1.4rem;
+  color: var(--color-secondary);
+  text-transform: uppercase;
+  letter-spacing: 0.2em;
 }
 
 .ampersand {
-  font-size: 3rem;
+  font-family: var(--font-heading);
+  font-size: 1.4rem;
   color: var(--color-primary);
-  font-style: normal;
-  font-weight: 300;
-  opacity: 0.7;
+  font-style: italic;
 }
 
-.botanicalDecoration {
-  margin-top: 20px;
-  display: flex;
-  justify-content: center;
-}
-
-.loaderContainer {
-  height: 40px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  width: 200px;
-}
-
-.loaderLine {
-  height: 1px;
-  background-color: var(--color-primary);
-  opacity: 0.5;
-}
-
-.startButton {
-  padding: 12px 35px;
-  font-size: 0.95rem;
-  color: var(--color-bg-deep);
-  background: linear-gradient(135deg, var(--color-primary) 0%, #b8964d 100%);
-  border-radius: 30px;
+.openingSubtext {
   font-family: var(--font-body);
+  font-size: 0.75rem;
+  color: var(--color-text-muted);
+  letter-spacing: 0.25em;
   text-transform: uppercase;
-  letter-spacing: 0.15em;
-  transition: all 0.3s ease;
-  box-shadow: 0 10px 20px rgba(0,0,0,0.3);
 }
 
-.startButton:hover {
-  box-shadow: 0 0 20px rgba(214, 181, 109, 0.4);
+/* Open Invitation Button */
+.actionContainer {
+  height: 100px;
+  display: flex;
+  justify-content: center;
+  align-items: flex-end;
+  margin-bottom: 5vh;
+}
+
+.openButton {
+  position: relative;
+  padding: 18px 45px;
+  background: transparent;
+  border: 1px solid rgba(214, 181, 109, 0.4);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  overflow: hidden;
+  transition: all 0.5s ease;
+  backdrop-filter: blur(3px);
+}
+
+.openButton:hover {
+  background: rgba(214, 181, 109, 0.05);
+  border-color: rgba(214, 181, 109, 0.8);
+  box-shadow: 0 0 20px rgba(214, 181, 109, 0.1);
+}
+
+.buttonBorderGlow {
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 40%;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--color-primary), transparent);
+  animation: borderTravel 5s infinite linear;
+}
+
+@keyframes borderTravel {
+  0% { left: -100%; }
+  30% { left: 200%; }
+  100% { left: 200%; }
+}
+
+.buttonText {
+  font-family: var(--font-heading);
+  font-size: 1.1rem;
+  color: var(--color-primary);
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+}
+
+.buttonSubtext {
+  font-family: var(--font-body);
+  font-size: 0.6rem;
+  color: var(--color-text-muted);
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  font-style: italic;
+}
+
+/* --- MOBILE SPECIFIC FIXES --- */
+@media (max-width: 768px) {
+  .watermarkNames {
+    height: 55vh; /* Taller on mobile so text avoids the cross entirely */
+  }
+  .watermarkName {
+    font-size: 22vw; /* Adjusted for alternating names */
+  }
+  .watermarkSeparator {
+    font-size: 10vw;
+  }
+  .marqueeRow {
+    gap: 12vw;
+  }
+  
+  /* Scale down cross to fit smaller mobile screens nicely */
+  .sacredCross {
+    width: 140px;
+    height: 210px;
+  }
+  .halo {
+    width: 180px;
+    height: 270px;
+  }
+  
+  /* Tighten spacing to prevent overflow/scrolling */
+  .content {
+    height: 95%;
+    padding-top: 6vh;
+  }
+  
+  .messageContainer {
+    margin-bottom: 2vh;
+  }
+  
+  .openingMessage {
+    font-size: 1.6rem;
+    margin-bottom: 15px;
+  }
+  
+  .namesContainer {
+    margin-bottom: 15px;
+    gap: 10px;
+  }
+  
+  .name {
+    font-size: 1.1rem;
+    letter-spacing: 0.15em;
+  }
+  
+  .ampersand {
+    font-size: 1.1rem;
+  }
+  
+  .openingSubtext {
+    font-size: 0.65rem;
+    letter-spacing: 0.15em;
+  }
+
+  .actionContainer {
+    height: 80px;
+    margin-bottom: 3vh;
+  }
+  
+  .openButton {
+    padding: 15px 35px;
+  }
+  
+  .buttonText {
+    font-size: 1rem;
+  }
+}
+
+/* Handle landscape mode on very short screens */
+@media (max-height: 450px) {
+  .watermarkNames {
+    height: 70vh;
+  }
+  .sacredCross {
+    width: 100px;
+    height: 150px;
+  }
+  .halo {
+    display: none;
+  }
+  .openingMessage {
+    font-size: 1.3rem;
+    margin-bottom: 5px;
+  }
+  .namesContainer {
+    margin-bottom: 5px;
+  }
 }

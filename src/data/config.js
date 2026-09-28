@@ -1,17 +1,19 @@
 export const weddingData = {
-  groom: {
-    name: "Groom Name",
-    shortName: "Groom"
-  },
   bride: {
-    name: "Bride Name",
-    shortName: "Bride"
+    name: "Riya",
+    shortName: "Riya"
   },
+  groom: {
+    name: "Jafran",
+    shortName: "Jafran"
+  },
+  openingMessage: "Together in His grace",
+  openingSubtext: "We invite you to celebrate our beginning",
   wedding: {
     date: "December 25, 2026",
-    time: "10:30 AM",
-    venue: "Grand Kerala Palace",
-    address: "123 Heritage Way, Kerala"
+    time: "4:30 PM",
+    venue: "Grace Cathedral",
+    address: "123 Sanctuary Way"
   },
   story: [
     { year: "2020", title: "First Met", description: "Met through mutual friends." },
