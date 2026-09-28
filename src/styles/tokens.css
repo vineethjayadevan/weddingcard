@@ -1,15 +1,16 @@
 :root {
-  /* Colors for Concept A: Kerala Heritage */
-  --color-bg-dark: #0a0a05;
-  --color-primary: #d4af37; /* Gold */
-  --color-secondary: #f4e8d3; /* Cream */
-  --color-accent: #2e4a36; /* Deep Green */
-  --color-text-main: #f4e8d3;
-  --color-text-muted: rgba(244, 232, 211, 0.7);
+  /* Colors for Luxury Christian Evening Wedding */
+  --color-bg-dark: #07111F; /* Midnight Navy */
+  --color-bg-deep: #03080f; /* Deeper Navy */
+  --color-primary: #D6B56D; /* Champagne Gold */
+  --color-secondary: #F7F1E5; /* Warm Ivory */
+  --color-accent: #421C2B; /* Deep Burgundy */
+  --color-text-main: #FFF9E9; /* Warm White */
+  --color-text-muted: rgba(255, 249, 233, 0.6);
 
   /* Typography */
-  --font-heading: 'Playfair Display', serif;
-  --font-body: 'Inter', sans-serif;
+  --font-heading: 'Cormorant Garamond', serif;
+  --font-body: 'Lato', sans-serif;
   
   /* Z-index */
   --z-scene: 1;

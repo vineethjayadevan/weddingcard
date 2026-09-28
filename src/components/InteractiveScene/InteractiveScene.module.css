@@ -7,7 +7,7 @@
   overflow: hidden;
   background-color: var(--color-bg-dark);
   z-index: var(--z-scene);
-  opacity: 0; /* Handled by GSAP on mount */
+  opacity: 0;
 }
 
 .layer {
@@ -21,40 +21,94 @@
   pointer-events: none;
 }
 
-.ambientGlow {
+/* Layer 1: Atmosphere */
+.layerAtmosphere {
+  background: var(--color-bg-dark);
+}
+
+.haze {
   position: absolute;
-  top: 50%;
-  left: 50%;
-  width: 80%;
-  height: 80%;
-  transform: translate(-50%, -50%);
-  background: radial-gradient(circle, rgba(212, 175, 55, 0.15) 0%, rgba(10, 10, 5, 0) 70%);
-  animation: pulseGlow 8s infinite alternate ease-in-out;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: radial-gradient(circle at 50% 60%, rgba(214, 181, 109, 0.08) 0%, rgba(7, 17, 31, 0.9) 85%);
+}
+
+.dustParticles {
+  position: absolute;
+  width: 100%;
+  height: 200%;
+  top: -100%;
+  background-image: 
+    radial-gradient(circle at 20% 30%, rgba(247, 241, 229, 0.5) 1px, transparent 1px),
+    radial-gradient(circle at 80% 40%, rgba(214, 181, 109, 0.4) 1.5px, transparent 1.5px),
+    radial-gradient(circle at 40% 70%, rgba(247, 241, 229, 0.6) 1px, transparent 1px),
+    radial-gradient(circle at 70% 80%, rgba(214, 181, 109, 0.3) 1px, transparent 1px);
+  background-size: 180px 180px;
+  animation: drift 70s linear infinite;
+  opacity: 0.7;
+}
+
+@keyframes drift {
+  from { transform: translateY(0); }
+  to { transform: translateY(180px); }
+}
+
+/* Layer 2: Chapel & Stained Glass (SVG) */
+.chapelSvg {
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+
+.breathingGlow {
+  animation: pulseGlow 6s infinite alternate ease-in-out;
+  transform-origin: center;
 }
 
 @keyframes pulseGlow {
-  0% { opacity: 0.6; transform: translate(-50%, -50%) scale(0.9); }
-  100% { opacity: 1; transform: translate(-50%, -50%) scale(1.1); }
+  0% { opacity: 0.7; transform: scale(0.95); }
+  100% { opacity: 1; transform: scale(1.05); }
 }
 
-.layerBackground {
-  background: radial-gradient(circle at center, #1a2a1f 0%, var(--color-bg-dark) 100%);
+.svgCross {
+  filter: drop-shadow(0px 0px 8px rgba(214, 181, 109, 0.9));
 }
 
-.layerMid {
-  /* Placeholder for Mandapam illustration */
-  /* border: 1px solid rgba(212, 175, 55, 0.05); */
+.lightRays {
+  mix-blend-mode: screen;
+  animation: shimmerRays 6s infinite alternate ease-in-out;
 }
 
+@keyframes shimmerRays {
+  0% { opacity: 0.6; }
+  100% { opacity: 1; }
+}
+
+/* Layer 3: Aisle */
+.layerAisle {
+  display: flex;
+  justify-content: center;
+  align-items: flex-end;
+}
+
+.aislePath {
+  width: 30%;
+  height: 40%;
+  background: linear-gradient(to top, rgba(214, 181, 109, 0.06) 0%, transparent 100%);
+  clip-path: polygon(15% 100%, 85% 100%, 55% 0, 45% 0);
+  border-left: 1px solid rgba(214, 181, 109, 0.1);
+  border-right: 1px solid rgba(214, 181, 109, 0.1);
+}
+
+/* Layer 4: Interactive Hotspots */
 .layerInteractive {
-  /* Allowed to click within this layer's children */
+  z-index: 5;
 }
 
-.layerForeground {
-  /* Placeholder for floating foreground elements */
-}
-
-/* Hotspot Interactions */
 .hotspot {
   position: absolute;
   transform: translate(-50%, -50%);
@@ -66,10 +120,10 @@
 }
 
 .hotspotContent {
-  width: 52px;
-  height: 52px;
-  background-color: rgba(10, 10, 5, 0.85);
-  border: 1px solid var(--color-primary);
+  width: 44px;
+  height: 44px;
+  background-color: rgba(214, 181, 109, 0.05);
+  border: 1px solid rgba(214, 181, 109, 0.4);
   border-radius: 50%;
   display: flex;
   justify-content: center;
@@ -77,42 +131,44 @@
   color: var(--color-primary);
   position: relative;
   z-index: 2;
-  transition: all 0.3s ease;
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
   backdrop-filter: blur(4px);
+  box-shadow: 0 0 15px rgba(214, 181, 109, 0.1);
 }
 
 .hotspot:hover .hotspotContent {
-  background-color: var(--color-primary);
-  color: var(--color-bg-dark);
+  background-color: rgba(214, 181, 109, 0.15);
   transform: scale(1.1);
-  box-shadow: 0 0 15px rgba(212, 175, 55, 0.3);
+  box-shadow: 0 0 25px rgba(214, 181, 109, 0.4);
+  border-color: rgba(214, 181, 109, 0.8);
 }
 
 .hotspotPulse {
   position: absolute;
   top: 50%;
   left: 50%;
-  width: 52px;
-  height: 52px;
-  background-color: var(--color-primary);
+  width: 44px;
+  height: 44px;
+  background-color: rgba(214, 181, 109, 0.3);
   border-radius: 50%;
   transform: translate(-50%, -50%);
   z-index: 1;
-  animation: pulse 2.5s infinite cubic-bezier(0.4, 0, 0.2, 1);
+  animation: pulse 3s infinite cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 @keyframes pulse {
-  0% { transform: translate(-50%, -50%) scale(1); opacity: 0.7; }
-  100% { transform: translate(-50%, -50%) scale(1.8); opacity: 0; }
+  0% { transform: translate(-50%, -50%) scale(1); opacity: 0.8; }
+  100% { transform: translate(-50%, -50%) scale(2); opacity: 0; }
 }
 
 .hotspotLabel {
-  margin-top: 12px;
-  font-size: 0.85rem;
-  letter-spacing: 0.1em;
-  color: var(--color-primary);
+  margin-top: 10px;
+  font-family: var(--font-body);
+  font-size: 0.75rem;
+  letter-spacing: 0.15em;
+  color: var(--color-secondary);
   text-transform: uppercase;
-  text-shadow: 0px 2px 4px rgba(0,0,0,0.9);
+  text-shadow: 0px 2px 8px rgba(0,0,0,1);
   opacity: 0;
   transform: translateY(10px);
   transition: all 0.3s ease;
@@ -124,11 +180,117 @@
   transform: translateY(0);
 }
 
-/* Touch optimization: labels always slightly visible */
 @media (max-width: 768px) {
   .hotspotLabel {
-    opacity: 0.8;
+    opacity: 0.85;
     transform: translateY(0);
-    color: var(--color-text-main);
   }
+}
+
+/* Layer 5: Foreground Flowers & Candles */
+.layerForeground {
+  pointer-events: none;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  padding: 0;
+}
+
+.floralPlaceholderLeft, .floralPlaceholderRight {
+  width: 30vw;
+  height: 35vh;
+  min-width: 150px;
+  position: relative;
+}
+
+/* Subtly representing flowers using CSS for now until assets are provided */
+.floralSilhouette {
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+  height: 100%;
+  background: 
+    radial-gradient(circle at 30% 80%, rgba(247, 241, 229, 0.1) 0%, transparent 40%),
+    radial-gradient(circle at 70% 90%, rgba(247, 241, 229, 0.05) 0%, transparent 30%),
+    radial-gradient(circle at 50% 100%, rgba(13, 26, 43, 0.9) 0%, transparent 60%);
+}
+
+.candleGroup {
+  position: absolute;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.candleGroupLeft {
+  bottom: 15%;
+  right: 25%;
+}
+
+.candleGroupLeftSmall {
+  bottom: 8%;
+  right: 55%;
+  transform: scale(0.7);
+}
+
+.candleGroupRight {
+  bottom: 20%;
+  left: 25%;
+}
+
+.candleStem {
+  width: 14px;
+  height: 60px;
+  background: linear-gradient(to right, #c4bcae, #f7f1e5 30%, #c4bcae);
+  border-radius: 2px 2px 0 0;
+  box-shadow: inset 0 -10px 15px rgba(0,0,0,0.6);
+}
+
+.candleStemSmall {
+  width: 14px;
+  height: 40px;
+  background: linear-gradient(to right, #c4bcae, #f7f1e5 30%, #c4bcae);
+  border-radius: 2px 2px 0 0;
+}
+
+.candleFlame {
+  position: absolute;
+  top: -16px;
+  width: 12px;
+  height: 24px;
+  background: radial-gradient(ellipse at bottom, #FFF9E9 10%, #D6B56D 50%, transparent 100%);
+  border-radius: 50% 50% 20% 20%;
+  animation: flicker 3s ease-in-out infinite alternate;
+  filter: blur(0.5px);
+}
+
+.candleGlow {
+  position: absolute;
+  top: -20px;
+  left: -25px;
+  width: 60px;
+  height: 60px;
+  background: #D6B56D;
+  border-radius: 50%;
+  filter: blur(20px);
+  opacity: 0.25;
+  animation: pulseGlow 4s ease-in-out infinite alternate;
+}
+
+@keyframes flicker {
+  0% { transform: scale(1) rotate(0deg); opacity: 0.85; }
+  25% { transform: scale(1.05) rotate(-1deg); opacity: 1; }
+  50% { transform: scale(0.95) rotate(1deg); opacity: 0.8; }
+  75% { transform: scale(1.02) rotate(2deg); opacity: 0.95; }
+  100% { transform: scale(1) rotate(0deg); opacity: 0.85; }
+}
+
+.foregroundVignette {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 30%;
+  background: linear-gradient(to top, var(--color-bg-deep) 0%, transparent 100%);
+  pointer-events: none;
 }
