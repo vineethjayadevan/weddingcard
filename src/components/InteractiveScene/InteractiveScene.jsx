@@ -182,8 +182,15 @@ const InteractiveScene = ({ hasStarted, hasOrientationPermission }) => {
     <>
       <div className={styles.sceneContainer} ref={sceneRef}>
         
-        {/* Layer 0: Sky & Particles */}
+        {/* Layer 0: Sky, Image & Particles */}
         <div className={`${styles.layer} ${styles.layerAtmosphere}`} ref={el => layersRef.current[0] = el}>
+           <img 
+             src="/opening-bg.jpeg" 
+             alt="Cinematic Background" 
+             className={styles.backgroundImage}
+             onError={(e) => e.target.style.display = 'none'} 
+           />
+           <div className={styles.atmosphereOverlay}></div>
            <div className={styles.dustParticles}></div>
         </div>
 
